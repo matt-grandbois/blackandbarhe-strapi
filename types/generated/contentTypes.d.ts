@@ -362,6 +362,129 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
+export interface ApiPostPost extends Schema.CollectionType {
+  collectionName: 'posts';
+  info: {
+    singularName: 'post';
+    pluralName: 'posts';
+    displayName: 'Post';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    slug: Attribute.UID<'api::post.post', 'title'> & Attribute.Required;
+    featuredImage: Attribute.Media;
+    excerpt: Attribute.Text;
+    categories: Attribute.Relation<
+      'api::post.post',
+      'manyToMany',
+      'api::post-category.post-category'
+    >;
+    tags: Attribute.Relation<
+      'api::post.post',
+      'manyToMany',
+      'api::post-tag.post-tag'
+    >;
+    featured: Attribute.Boolean & Attribute.DefaultTo<false>;
+    author: Attribute.Relation<
+      'api::post.post',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    content: Attribute.RichText;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::post.post', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::post.post', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPostCategoryPostCategory extends Schema.CollectionType {
+  collectionName: 'post_categories';
+  info: {
+    singularName: 'post-category';
+    pluralName: 'post-categories';
+    displayName: 'Post Category';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+    slug: Attribute.UID<'api::post-category.post-category', 'title'> &
+      Attribute.Required;
+    description: Attribute.Blocks;
+    parent: Attribute.Relation<
+      'api::post-category.post-category',
+      'oneToMany',
+      'api::post-category.post-category'
+    >;
+    posts: Attribute.Relation<
+      'api::post-category.post-category',
+      'manyToMany',
+      'api::post.post'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::post-category.post-category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::post-category.post-category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPostTagPostTag extends Schema.CollectionType {
+  collectionName: 'post_tags';
+  info: {
+    singularName: 'post-tag';
+    pluralName: 'post-tags';
+    displayName: 'Post Tag';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
+    slug: Attribute.UID<'api::post-tag.post-tag', 'name'> & Attribute.Required;
+    posts: Attribute.Relation<
+      'api::post-tag.post-tag',
+      'manyToMany',
+      'api::post.post'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::post-tag.post-tag',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::post-tag.post-tag',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -722,7 +845,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     username: Attribute.String &
@@ -751,6 +873,14 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    posts: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::post.post'
+    >;
+    firstName: Attribute.String;
+    lastName: Attribute.String;
+    avatar: Attribute.Media;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -819,6 +949,9 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
+      'api::post.post': ApiPostPost;
+      'api::post-category.post-category': ApiPostCategoryPostCategory;
+      'api::post-tag.post-tag': ApiPostTagPostTag;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
