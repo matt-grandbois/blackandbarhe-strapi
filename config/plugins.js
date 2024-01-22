@@ -1,31 +1,38 @@
 module.exports = ({ env }) => ({
-    /*
-    upload: {
-      config: {
-        provider: 'aws-s3', // For community providers pass the full package name (e.g. provider: 'strapi-provider-upload-google-cloud-storage')
-        providerOptions: {
-          accessKeyId: env('AWS_ACCESS_KEY_ID'),
-          secretAccessKey: env('AWS_ACCESS_SECRET'),
-          region: env('AWS_REGION'),
+  upload: {
+    config: {
+      provider: 'aws-s3',
+      providerOptions: {
+        s3Options: {
+          accessKeyId: env('AKIAW3MEAONSPR2E5LB3'),
+          secretAccessKey: env('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'),
+          region: env('us-east-1'),
           params: {
-            ACL: env('AWS_ACL', 'public-read'), // 'private' if you want to make the uploaded files private
-            Bucket: env('AWS_BUCKET'),
+            Bucket: env('blackandbarhe-strapi'),
           },
-        },
+        }
       },
-    }, 
-    */
-    email: {
-        config: {
-          provider: 'sendgrid',
-          providerOptions: {
-            apiKey: env('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'),
-          },
-          settings: {
-            defaultFrom: 'no-reply@blackandbarhe.com',
-            defaultReplyTo: 'no-reply@blackandbarhe.com',
-            testAddress: 'matt@mattgrandbois.com',
-          },
+      actionOptions: {
+        upload: {
+          ACL: null
         },
+        uploadStream: {
+          ACL: null
+        },
+      }
     },
-  });
+  },
+  email: {
+    config: {
+      provider: 'sendgrid',
+      providerOptions: {
+        apiKey: env('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'),
+      },
+      settings: {
+        defaultFrom: 'no-reply@blackandbarhe.com',
+        defaultReplyTo: 'no-reply@blackandbarhe.com',
+        testAddress: 'matt@mattgrandbois.com',
+      },
+    },
+  },
+});
