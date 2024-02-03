@@ -4,11 +4,11 @@ module.exports = ({ env }) => ({
       provider: 'aws-s3',
       providerOptions: {
         s3Options: {
-          accessKeyId: env('AKIAW3MEAONSPR2E5LB3'),
-          secretAccessKey: env('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'),
-          region: env('us-east-1'),
+          accessKeyId: env('S3_ACCESS_KEY_ID'),
+          secretAccessKey: env('S3_SECRET_ACCESS_KEY'),
+          region: env('S3_REGION'),
           params: {
-            Bucket: env('blackandbarhe-strapi'),
+            Bucket: env('S3_BUCKET'),
           },
         }
       },
@@ -24,14 +24,14 @@ module.exports = ({ env }) => ({
   },
   email: {
     config: {
-      provider: 'sendgrid',
+      provider: env('EMAIL_PROVIDER'),
       providerOptions: {
-        apiKey: env('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'),
+        apiKey: env('SENDGRID_API_KEY'),
       },
       settings: {
-        defaultFrom: 'no-reply@blackandbarhe.com',
-        defaultReplyTo: 'no-reply@blackandbarhe.com',
-        testAddress: 'matt@mattgrandbois.com',
+        defaultFrom: env('SENDGRID_FROM_EMAIL'),
+        defaultReplyTo: env('SENDGRID_REPLY_TO_EMAIL'),
+        testAddress: env('SENDGRID_TEST_EMAIL'),
       },
     },
   },
